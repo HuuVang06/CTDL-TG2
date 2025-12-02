@@ -8,10 +8,9 @@
 #include <string>
 #include <limits>
 #include <iomanip>
-#include <algorithm> // BẮT BUỘC CHO std::sort
+#include <algorithm> 
 using namespace std;
 
-// Hằng số cho độ trễ in ra
 const auto DELAY_TIME = chrono::milliseconds(500);
 const int NUM_BUCKETS = 10;
 
@@ -24,7 +23,6 @@ struct SinhVien {
     long mssv;
 };
 
-// Cấu trúc cho thuật toán Đồ thị
 struct Edge {
     int src, dest;
     int weight;
@@ -35,7 +33,6 @@ struct Graph {
     Edge* edges;
 };
 
-// Cấu trúc cho Disjoint Set Union (Dành cho Kruskal)
 struct Subset {
     int parent;
     int rank;
@@ -386,20 +383,17 @@ void kruskalMST(Graph* graph) {
     cout << "\n--- THỰC HIỆN THUẬT TOÁN KRUSKAL ---\n";
     // 
 
-    // 1. Sắp xếp các cạnh theo trọng số tăng dần
     cout << "1. Sap xep cac canh (Edge) theo trong so: ";
     // Sử dụng std::sort (cần #include <algorithm>)
     sort(graph->edges, graph->edges + graph->E, compareEdges);
     cout << "Hoan thanh.\n";
 
-    // 2. Khởi tạo Disjoint Set
     Subset* subsets = new Subset[V];
     for (int v = 0; v < V; v++) {
         subsets[v].parent = v;
         subsets[v].rank = 0;
     }
 
-    // 3. Lặp qua các cạnh đã sắp xếp
     cout << "2. Bat dau chon canh de xay dung MST:\n";
     while (e < V - 1 && i < graph->E) {
         Edge next_edge = graph->edges[i++];
@@ -419,7 +413,6 @@ void kruskalMST(Graph* graph) {
         this_thread::sleep_for(DELAY_TIME);
     }
 
-    // 4. In kết quả
     cout << "\n--- KET QUA KRUSKAL MST ---\n";
     int minimumCost = 0;
     for (i = 0; i < e; ++i) {
@@ -433,7 +426,6 @@ void kruskalMST(Graph* graph) {
     delete[] subsets;
 }
 
-// Hàm tìm đỉnh có key (trọng số) nhỏ nhất trong các đỉnh chưa được chọn
 int minKey(int V, const int key[], const bool mstSet[]) {
     int min = numeric_limits<int>::max(), min_index;
 
@@ -444,7 +436,6 @@ int minKey(int V, const int key[], const bool mstSet[]) {
     return min_index;
 }
 
-// AdjMatrix: Ma trận kề (AdjMatrix[i][j] là trọng số cạnh i-j)
 void primMST(int V, int** AdjMatrix) {
     if (V <= 0) return;
 
@@ -455,26 +446,21 @@ void primMST(int V, int** AdjMatrix) {
     cout << "\n--- THỰC HIỆN THUẬT TOÁN PRIM ---\n";
     // 
 
-    // Khởi tạo
     for (int i = 0; i < V; i++) {
         key[i] = numeric_limits<int>::max();
         mstSet[i] = false;
     }
 
-    // Bắt đầu từ đỉnh 0
     key[0] = 0;
     parent[0] = -1;
 
-    // Lặp để tìm V-1 cạnh
     for (int count = 0; count < V - 1; count++) {
-        // 1. Chọn đỉnh có key nhỏ nhất
         int u = minKey(V, key, mstSet);
         mstSet[u] = true;
 
         cout << "-> Chon dinh " << u << " vao MST. Key: " << key[u] << endl;
         this_thread::sleep_for(DELAY_TIME);
 
-        // 2. Cập nhật key và parent của các đỉnh kề
         for (int v = 0; v < V; v++) {
             // AdjMatrix[u][v] > 0: Có cạnh (u, v)
             // mstSet[v] == false: v chưa nằm trong MST
@@ -487,7 +473,6 @@ void primMST(int V, int** AdjMatrix) {
         }
     }
 
-    // 3. In kết quả
     cout << "\n--- KẾT QUẢ PRIM MST ---\n";
     int minimumCost = 0;
     for (int i = 1; i < V; i++) {
@@ -1214,4 +1199,5 @@ int main()
     delete[] current_students;
 
     return 0;
+
 }
